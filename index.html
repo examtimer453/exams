@@ -4,15 +4,35 @@
 <meta charset="UTF-8">
 <title>Exam Alert System</title>
 <style>
-body { font-family: Arial,sans-serif; margin:0; padding:0; background:linear-gradient(to right,#4facfe,#00f2fe); color:#fff; text-align:center;}
-h1 { background: rgba(0,0,0,0.5); padding:20px; margin:0; font-size:2em;}
-.container { max-width:800px; margin:auto; padding:20px;}
+body {
+    font-family: Arial,sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(to right,#4facfe,#00f2fe);
+    color:#fff; text-align:center;
+}
+h1 {
+    background: rgba(0,0,0,0.5);
+    padding:20px; margin:0;
+    font-size:2em;
+}
+.container {
+    max-width:800px; margin:auto; padding:20px;
+}
 label { font-weight:bold; margin-right:10px; }
-select, input[type="time"], button { font-size:1.1em; padding:10px; margin:10px 0; border-radius:8px; border:none; }
-button { background-color:#2a71d0; color:#fff; cursor:pointer; transition:0.3s;}
+select, input[type="time"], button {
+    font-size:1.1em; padding:10px; margin:10px 0; border-radius:8px; border:none;
+}
+button {
+    background-color:#2a71d0; color:#fff; cursor:pointer; transition:0.3s;
+}
 button:hover{ background-color:#1e4c99;}
-#log { margin:20px auto; font-size:1.2em; max-width:700px; text-align:left; }
-.alert-box { border-left:5px solid #fff; background:rgba(255,255,255,0.2); padding:12px 15px; margin:8px 0; border-radius:8px; font-weight:bold;}
+#log {
+    margin:20px auto; font-size:1.2em; max-width:700px; text-align:left;
+}
+.alert-box {
+    border-left:5px solid #fff; background:rgba(255,255,255,0.2);
+    padding:12px 15px; margin:8px 0; border-radius:8px; font-weight:bold;
+}
 .alert-normal { border-color:#00f2fe; }
 .alert-extra { border-color:#ff9800; }
 </style>
@@ -61,26 +81,12 @@ button:hover{ background-color:#1e4c99;}
 // --- GLOBALS ---
 const EXTRA_PERCENT = 25;
 const subjects = {
-    "math": 90,
-    "Computer Science":90,
-    "Biology (Seperate Sciences)":90,
-    "Chemisty (Seperate Sciences)":90,
-    "Physics (Seperate Sciences)":90,
-    "Biology (Trilogy)":60,
-    "Chemisty (Trilogy)":60,
-    "Physics (Trilogy)":60,
-    "Design Technology":90,
-    "Drama":90,
-    "Dutch":90,
-    "English Language":90,
-    "English Literature":90,
-    "Food and Nutrition":90,
-    "French":90,
-    "German":90,
-    "History":80,
-    "Geography":90,
-    "Music":90,
-    "PE":90
+    "math": 90, "Computer Science":90, "Biology (Seperate Sciences)":90,
+    "Chemisty (Seperate Sciences)":90, "Physics (Seperate Sciences)":90,
+    "Biology (Trilogy)":60, "Chemisty (Trilogy)":60, "Physics (Trilogy)":60,
+    "Design Technology":90, "Drama":90, "Dutch":90, "English Language":90,
+    "English Literature":90, "Food and Nutrition":90, "French":90, "German":90,
+    "History":80, "Geography":90, "Music":90, "PE":90
 };
 
 // --- Firebase Config ---
@@ -112,11 +118,14 @@ function startExam() {
 
 // --- Render exams ---
 function renderExams(exams){
-    document.getElementById("log").innerHTML="";
+    const log = document.getElementById("log");
+    log.innerHTML = "";
     const now = new Date();
+
     for(let subject in exams){
-        const data = exams[subject];
-        const [h,m] = data.startTime.split(":");
+        const timeStr = exams[subject].startTime;
+        if(!timeStr) continue;
+        const [h,m] = timeStr.split(":");
         const start = new Date(); start.setHours(h); start.setMinutes(m); start.setSeconds(0);
 
         const normal = subjects[subject];
@@ -132,10 +141,10 @@ function renderExams(exams){
         ];
 
         events.forEach(ev=>{
-            const div=document.createElement("div");
-            div.className=`alert-box ${ev.type==='extra'?'alert-extra':'alert-normal'}`;
-            div.textContent=`${subject} - ${ev.label} @ ${ev.time.toLocaleTimeString()}`;
-            document.getElementById("log").appendChild(div);
+            const div = document.createElement("div");
+            div.className = `alert-box ${ev.type==='extra'?'alert-extra':'alert-normal'}`;
+            div.textContent = `${subject} - ${ev.label} @ ${ev.time.toLocaleTimeString()}`;
+            log.appendChild(div);
 
             const delay = ev.time-now;
             if(delay>0){ setTimeout(()=>speak(`${subject} - ${ev.label}`), delay);}
@@ -145,9 +154,9 @@ function renderExams(exams){
 
 // --- Voice ---
 function speak(text){
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang="en-US";
-    window.speechSynthesis.speak(u);
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    window.speechSynthesis.speak(utter);
 }
 </script>
 
