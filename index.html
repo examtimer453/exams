@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exam Alert System</title>
+<style>
+body { font-family: Arial; text-align:center; margin:30px; }
+h1 { color: #333; }
+#log { margin-top:20px; font-size:18px; }
+.alert-box { border:1px solid #ccc; padding:10px; margin:10px; }
+</style>
+</head>
+<body>
+
+<h1>Exam Alert System</h1>
+
+<label>Subject: </label>
+<select id="subject">
+  <option value="math">Mathematics</option>
+  <option value="turkish">Turkish</option>
+  <option value="science">Science</option>
+</select>
+<br><br>
+
+<label>Exam Start Time: </label>
+<input type="time" id="startTime">
+<br><br>
+
+<button onclick="startExam()">Start Exam</button>
+
+<div id="log"></div>
+
+<script>
+// ================= GLOBAL VARIABLE =================
+const EXTRA_PERCENT = 25; // Extra time for students
+// ===================================================
+
+// Define normal durations in minutes
+const subjects = {
+    math: 90,
+    turkish: 75,
+    science: 80
+};
+
+// Chronological events queue
+let events = [];
+
+function startExam() {
+    let subject = document.getElementById("subject").value;
+    let startInput = document.getElementById("startTime").value;
+    
+    if(!startInput){
+        alert("Please enter exam start time!");
+        return;
+    }
+
+    let [hours, minutes] = startInput.split(":");
+    let startDate = new Date();
+    startDate.setHours(hours);
+    startDate.setMinutes(minutes);
+    startDate.setSeconds(0);
+
+    let normalDuration = subjects[subject];
+    let extraDuration = normalDuration + (normalDuration * EXTRA_PERCENT / 100);
+
+    events = []; // clear previous events
+
+    // Create events in chronological order
+    scheduleEvent(new Date(startDate.getTime() + (normalDuration-30)*60000), `NORMAL students: Last 30 minutes`);
+    scheduleEvent(new Date(startDate.getTime() + (extraDuration-30)*60000), `EXTRA students: Last 30 minutes`);
+    scheduleEvent(new Date(startDate.getTime() + (normalDuration-5)*60000), `NORMAL students: Last 5 minutes`);
+    scheduleEvent(new Date(startDate.getTime() + normalDuration*60000), `NORMAL students: Exam finished`);
+    scheduleEvent(new Date(startDate.getTime() + (extraDuration-5)*60000), `EXTRA students: Last 5 minutes`);
+    scheduleEvent(new Date(startDate.getTime() + extraDuration*60000), `EXTRA students: Exam finished`);
+
+    // Start timers
+    let now = new Date();
+    events.forEach(ev => {
+        let delay = ev.time - now;
+        if(delay > 0){
+            setTimeout(() => {
+                alert(ev.message);
+                speak(ev.message);
+                addToLog(ev.message);
+            }, delay);
+        } else {
+            // Event already passed
+            addToLog(ev.message + " (missed)");
+        }
+    });
+}
+
+function scheduleEvent(time, message){
+    events.push({time, message});
+}
+
+function speak(text){
+    let utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-US";
+    window.speechSynthesis.speak(utter);
+}
+
+function addToLog(message){
+    let div = document.createElement("div");
+    div.className = "alert-box";
+    div.textContent = message;
+    document.getElementById("log").appendChild(div);
+}
+</script>
+
+</body>
+</html>
