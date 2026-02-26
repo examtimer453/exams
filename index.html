@@ -136,13 +136,21 @@ const extraDuration = Math.round(normalDuration + (normalDuration*EXTRA_PERCENT/
 
 const groupDiv = document.createElement("div");
 groupDiv.className = "subject-group";
-groupDiv.innerHTML = `
-<b class="subject-title">${subjectName} (Starts: ${timeStr})</b>
-<button onclick="deleteExam('${key}')" 
-style="background:#ff4d4d;margin-top:5px;">
-Delete Exam
-</button>
-`;
+const title = document.createElement("b");
+title.className = "subject-title";
+title.textContent = `${subjectName} (Starts: ${timeStr})`;
+
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "Delete Exam";
+deleteBtn.style.background = "#ff4d4d";
+deleteBtn.style.marginTop = "5px";
+
+deleteBtn.addEventListener("click", function(){
+    deleteExam(key);
+});
+
+groupDiv.appendChild(title);
+groupDiv.appendChild(deleteBtn);
 
 const events = [
 {time:new Date(start.getTime()+(normalDuration-30)*60000),label:"NORMAL: 30 min left",type:"normal"},
