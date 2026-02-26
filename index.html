@@ -1,156 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Exam Alert System</title>
-    <style>
-        body { font-family: Arial,sans-serif; margin:0; padding:0; background: linear-gradient(to right,#4facfe,#00f2fe); color:#fff; text-align:center; }
-        h1 { background: rgba(0,0,0,0.5); padding:20px; margin:0; font-size:2em; }
-        .container { max-width:800px; margin:auto; padding:20px; }
-        label { font-weight:bold; margin-right:10px; }
-        select, input[type="time"], button { font-size:1.1em; padding:10px; margin:10px 0; border-radius:8px; border:none; outline: none; }
-        button { background-color:#2a71d0; color:#fff; cursor:pointer; transition:0.3s; font-weight: bold; }
-        button:hover{ background-color:#1e4c99; transform: scale(1.05); }
-        #log { margin:20px auto; font-size:1.2em; max-width:700px; text-align:left; }
-        .alert-box { border-left:5px solid #fff; background:rgba(255,255,255,0.2); padding:12px 15px; margin:8px 0; border-radius:8px; font-weight:bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .alert-normal { border-color:#00f2fe; }
-        .alert-extra { border-color:#ff9800; }
-        .subject-group { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
-        .subject-title { font-size: 1.4em; text-decoration: underline; margin-bottom: 10px; display: block; }
-    </style>
+<meta charset="UTF-8">
+<title>Exam Alert System</title>
+
+<style>
+body { font-family: Arial,sans-serif; margin:0; padding:0; background: linear-gradient(to right,#4facfe,#00f2fe); color:#fff; text-align:center; }
+h1 { background: rgba(0,0,0,0.5); padding:20px; margin:0; font-size:2em; }
+.container { max-width:800px; margin:auto; padding:20px; }
+label { font-weight:bold; margin-right:10px; }
+select, input[type="time"], button { font-size:1.1em; padding:10px; margin:10px 0; border-radius:8px; border:none; outline: none; }
+button { background-color:#2a71d0; color:#fff; cursor:pointer; transition:0.3s; font-weight: bold; }
+button:hover{ background-color:#1e4c99; transform: scale(1.05); }
+#log { margin:20px auto; font-size:1.2em; max-width:700px; text-align:left; }
+.alert-box { border-left:5px solid #fff; background:rgba(255,255,255,0.2); padding:12px 15px; margin:8px 0; border-radius:8px; font-weight:bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.alert-normal { border-color:#00f2fe; }
+.alert-extra { border-color:#ff9800; }
+.subject-group { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+.subject-title { font-size: 1.4em; text-decoration: underline; margin-bottom: 10px; display: block; }
+</style>
 </head>
 <body>
 
 <h1>Exam Alert System</h1>
+
 <div class="container">
-    <label>Subject:</label>
-    <select id="subject">
-      <option value="Mathematics">Mathematics</option>
-      <option value="Computer Science">Computer Science</option>
-      <option value="Biology (Seperate Sciences)">Biology (Seperate Sciences)</option>
-      <option value="Chemisty (Seperate Sciences)">Chemisty (Seperate Sciences)</option>
-      <option value="Physics (Seperate Sciences)">Physics (Seperate Sciences)</option>
-      <option value="Biology (Trilogy)">Biology (Trilogy)</option>
-      <option value="Chemisty (Trilogy)">Chemisty (Trilogy)</option>
-      <option value="Physics (Trilogy)">Physics (Trilogy)</option>
-      <option value="Design Technology">Design Technology</option>
-      <option value="Drama">Drama</option>
-      <option value="Dutch">Dutch</option>
-      <option value="English Language">English Language</option>
-      <option value="English Literature">English Literature</option>
-      <option value="Food and Nutrition">Food and Nutrition</option>
-      <option value="French">French</option>
-      <option value="German">German</option>
-      <option value="History">History</option>
-      <option value="Geography">Geography</option>
-      <option value="Music">Music</option>
-      <option value="PE">PE</option>
-    </select>
-    <br>
-    <label>Exam Start Time:</label>
-    <input type="time" id="startTime">
-    <br>
-    <button onclick="startExam()">Save Exam Schedule</button>
+<label>Subject:</label>
+<select id="subject">
+<option value="Mathematics">Mathematics</option>
+<option value="Computer Science">Computer Science</option>
+<option value="Biology (Separate Sciences)">Biology (Separate Sciences)</option>
+<option value="Chemistry (Separate Sciences)">Chemistry (Separate Sciences)</option>
+<option value="Physics (Separate Sciences)">Physics (Separate Sciences)</option>
+<option value="Biology (Trilogy)">Biology (Trilogy)</option>
+<option value="Chemistry (Trilogy)">Chemistry (Trilogy)</option>
+<option value="Physics (Trilogy)">Physics (Trilogy)</option>
+<option value="Design Technology">Design Technology</option>
+<option value="Drama">Drama</option>
+<option value="Dutch">Dutch</option>
+<option value="English Language">English Language</option>
+<option value="English Literature">English Literature</option>
+<option value="Food and Nutrition">Food and Nutrition</option>
+<option value="French">French</option>
+<option value="German">German</option>
+<option value="History">History</option>
+<option value="Geography">Geography</option>
+<option value="Music">Music</option>
+<option value="PE">PE</option>
+</select>
+
+<br>
+
+<label>Exam Start Time:</label>
+<input type="time" id="startTime">
+
+<br>
+<button onclick="startExam()">Save Exam Schedule</button>
 </div>
 
 <div id="log"></div>
 
 
-<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
 const EXTRA_PERCENT = 25;
+
 const subjectsData = {
-    "Mathematics": 90, "Computer Science":90, "Biology (Seperate Sciences)":90,
-    "Chemisty (Seperate Sciences)":90, "Physics (Seperate Sciences)":90,
-    "Biology (Trilogy)":60, "Chemisty (Trilogy)":60, "Physics (Trilogy)":60,
-    "Design Technology":90, "Drama":90, "Dutch":90, "English Language":90,
-    "English Literature":90, "Food and Nutrition":90, "French":90, "German":90,
-    "History":80, "Geography":90, "Music":90, "PE":90
+"Mathematics":90,"Computer Science":90,"Biology (Separate Sciences)":90,
+"Chemistry (Separate Sciences)":90,"Physics (Separate Sciences)":90,
+"Biology (Trilogy)":60,"Chemistry (Trilogy)":60,"Physics (Trilogy)":60,
+"Design Technology":90,"Drama":90,"Dutch":90,"English Language":90,
+"English Literature":90,"Food and Nutrition":90,"French":90,"German":90,
+"History":80,"Geography":90,"Music":90,"PE":90
 };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBG9HsrRsFq8YLkUHTDi4XlREdYwX1Jyd0",
-  authDomain: "exam-notice-86cd4.firebaseapp.com",
-  databaseURL: "https://exam-notice-86cd4-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "exam-notice-86cd4",
-  storageBucket: "exam-notice-86cd4.appspot.com",
-  messagingSenderId: "717990898282",
-  appId: "1:717990898282:web:f627c05aacf7aeca657813"
+apiKey: "AIzaSyBG9HsrRsFq8YLkUHTDi4XlREdYwX1Jyd0",
+authDomain: "exam-notice-86cd4.firebaseapp.com",
+databaseURL: "https://exam-notice-86cd4-default-rtdb.europe-west1.firebasedatabase.app",
+projectId: "exam-notice-86cd4",
+storageBucket: "exam-notice-86cd4.firebasestorage.app",
+messagingSenderId: "717990898282",
+appId: "1:717990898282:web:f627c05aacf7aeca657813"
 };
 
+// Firebase başlat
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Listener: Automatically updates the screen when data changes
+// Otomatik güncelleme
 db.ref("exams").on("value", snapshot => {
-    const exams = snapshot.val() || {};
-    renderExams(exams);
-}, error => {
-    console.error("Read failed: ", error);
+const exams = snapshot.val() || {};
+renderExams(exams);
 });
 
-function startExam() {
-    const subject = document.getElementById("subject").value;
-    const time = document.getElementById("startTime").value;
-    if(!time){ alert("Please select a start time"); return; }
-    
-    const safeKey = subject.replace(/[.#$/[\]]/g, "_");
-    
-    // We must send adminKey: "" to satisfy your Security Rules
-    db.ref("exams/" + safeKey).set({ 
-        startTime: time,
-        displayName: subject,
-        adminKey: "" 
-    }).then(() => {
-        console.log("Data saved successfully!");
-    }).catch(error => {
-        console.error("Write failed:", error);
-        alert("Error: " + error.message);
-    });
+function startExam(){
+const subject = document.getElementById("subject").value;
+const time = document.getElementById("startTime").value;
+
+if(!time){ alert("Please select a start time"); return; }
+
+const safeKey = subject.replace(/[.#$/[\]]/g, "_");
+
+db.ref("exams/" + safeKey).set({
+startTime: time,
+displayName: subject
+});
 }
 
 function renderExams(exams){
-    const log = document.getElementById("log");
-    log.innerHTML = "";
+const log = document.getElementById("log");
+log.innerHTML = "";
 
-    for(let key in exams){
-        const exam = exams[key];
-        const subjectName = exam.displayName || key;
-        const timeStr = exam.startTime;
-        if(!timeStr) continue;
-        
-        const [h, m] = timeStr.split(":");
-        const start = new Date();
-        start.setHours(parseInt(h), parseInt(m), 0, 0);
+for(let key in exams){
+const exam = exams[key];
+const subjectName = exam.displayName || key;
+const timeStr = exam.startTime;
+if(!timeStr) continue;
 
-        const normalDuration = subjectsData[subjectName] || 90;
-        const extraDuration = normalDuration + (normalDuration * EXTRA_PERCENT / 100);
+const [h,m] = timeStr.split(":");
+const start = new Date();
+start.setHours(parseInt(h),parseInt(m),0,0);
 
-        const groupDiv = document.createElement("div");
-        groupDiv.className = "subject-group";
-        groupDiv.innerHTML = `<b class="subject-title">${subjectName} (Starts: ${timeStr})</b>`;
+const normalDuration = subjectsData[subjectName] || 90;
+const extraDuration = Math.round(normalDuration + (normalDuration*EXTRA_PERCENT/100));
 
-        const events = [
-            {time: new Date(start.getTime() + (normalDuration-30)*60000), label: "NORMAL: 30 min left", type: "normal"},
-            {time: new Date(start.getTime() + (extraDuration-30)*60000), label: "EXTRA: 30 min left", type: "extra"},
-            {time: new Date(start.getTime() + (normalDuration-5)*60000), label: "NORMAL: 5 min left", type: "normal"},
-            {time: new Date(start.getTime() + (normalDuration)*60000), label: "NORMAL: Finished", type: "normal"},
-            {time: new Date(start.getTime() + (extraDuration-5)*60000), label: "EXTRA: 5 min left", type: "extra"},
-            {time: new Date(start.getTime() + (extraDuration)*60000), label: "EXTRA: Finished", type: "extra"}
-        ];
+const groupDiv = document.createElement("div");
+groupDiv.className = "subject-group";
+groupDiv.innerHTML = `<b class="subject-title">${subjectName} (Starts: ${timeStr})</b>`;
 
-        events.sort((a, b) => a.time - b.time).forEach(ev => {
-            const div = document.createElement("div");
-            div.className = `alert-box ${ev.type === 'extra' ? 'alert-extra' : 'alert-normal'}`;
-            div.textContent = `${ev.label} @ ${ev.time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-            groupDiv.appendChild(div);
-        });
+const events = [
+{time:new Date(start.getTime()+(normalDuration-30)*60000),label:"NORMAL: 30 min left",type:"normal"},
+{time:new Date(start.getTime()+(extraDuration-30)*60000),label:"EXTRA: 30 min left",type:"extra"},
+{time:new Date(start.getTime()+(normalDuration-5)*60000),label:"NORMAL: 5 min left",type:"normal"},
+{time:new Date(start.getTime()+(normalDuration)*60000),label:"NORMAL: Finished",type:"normal"},
+{time:new Date(start.getTime()+(extraDuration-5)*60000),label:"EXTRA: 5 min left",type:"extra"},
+{time:new Date(start.getTime()+(extraDuration)*60000),label:"EXTRA: Finished",type:"extra"}
+];
 
-        log.appendChild(groupDiv);
-    }
+events.sort((a,b)=>a.time-b.time).forEach(ev=>{
+const div=document.createElement("div");
+div.className=`alert-box ${ev.type==="extra"?"alert-extra":"alert-normal"}`;
+div.textContent=`${ev.label} @ ${ev.time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
+groupDiv.appendChild(div);
+});
+
+log.appendChild(groupDiv);
+}
 }
 </script>
+
 </body>
 </html>
