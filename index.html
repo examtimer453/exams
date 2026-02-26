@@ -94,6 +94,13 @@ const db = firebase.database();
 db.ref("exams").on("value", snapshot => {
 const exams = snapshot.val() || {};
 renderExams(exams);
+  function deleteExam(key){
+    if(confirm("Are you sure you want to delete this exam?")){
+        db.ref("exams/" + key).remove()
+        .then(()=> console.log("Deleted successfully"))
+        .catch(error=> alert("Delete failed: " + error.message));
+    }
+}
 });
 
 function startExam(){
@@ -129,7 +136,13 @@ const extraDuration = Math.round(normalDuration + (normalDuration*EXTRA_PERCENT/
 
 const groupDiv = document.createElement("div");
 groupDiv.className = "subject-group";
-groupDiv.innerHTML = `<b class="subject-title">${subjectName} (Starts: ${timeStr})</b>`;
+groupDiv.innerHTML = `
+<b class="subject-title">${subjectName} (Starts: ${timeStr})</b>
+<button onclick="deleteExam('${key}')" 
+style="background:#ff4d4d;margin-top:5px;">
+Delete Exam
+</button>
+`;
 
 const events = [
 {time:new Date(start.getTime()+(normalDuration-30)*60000),label:"NORMAL: 30 min left",type:"normal"},
