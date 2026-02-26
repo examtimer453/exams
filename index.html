@@ -55,9 +55,9 @@
 
 <div id="log"></div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com"></script>
-<script src="https://www.gstatic.com"></script>
+
+<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js"></script>
 
 <script>
 const EXTRA_PERCENT = 25;
@@ -70,23 +70,25 @@ const subjectsData = {
     "History":80, "Geography":90, "Music":90, "PE":90
 };
 
-// VUL DEZE GEGEVENS IN VANUIT JE FIREBASE CONSOLE
 const firebaseConfig = {
-  apiKey: "JOUW_API_KEY",
-  authDomain: "JOUW_PROJECT.firebaseapp.com",
-  databaseURL: "https://JOUW_PROJECT.firebaseio.com",
-  projectId: "JOUW_PROJECT_ID",
-  storageBucket: "JOUW_PROJECT.appspot.com",
-  messagingSenderId: "ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyBG9HsrRsFq8YLkUHTDi4XlREdYwX1Jyd0",
+  authDomain: "exam-notice-86cd4.firebaseapp.com",
+  databaseURL: "https://exam-notice-86cd4-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "exam-notice-86cd4",
+  storageBucket: "exam-notice-86cd4.appspot.com",
+  messagingSenderId: "717990898282",
+  appId: "1:717990898282:web:f627c05aacf7aeca657813"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// Listener: Automatically updates the screen when data changes
 db.ref("exams").on("value", snapshot => {
     const exams = snapshot.val() || {};
     renderExams(exams);
+}, error => {
+    console.error("Read failed: ", error);
 });
 
 function startExam() {
@@ -96,16 +98,16 @@ function startExam() {
     
     const safeKey = subject.replace(/[.#$/[\]]/g, "_");
     
-    // De adminKey: "" is cruciaal om door je Security Rules te komen
+    // We must send adminKey: "" to satisfy your Security Rules
     db.ref("exams/" + safeKey).set({ 
         startTime: time,
         displayName: subject,
         adminKey: "" 
     }).then(() => {
-        alert("Exam saved successfully!");
+        console.log("Data saved successfully!");
     }).catch(error => {
-        console.error("Fout bij opslaan:", error);
-        alert("Permission denied! Check your security rules.");
+        console.error("Write failed:", error);
+        alert("Error: " + error.message);
     });
 }
 
@@ -121,7 +123,7 @@ function renderExams(exams){
         
         const [h, m] = timeStr.split(":");
         const start = new Date();
-        start.setHours(h, m, 0, 0);
+        start.setHours(parseInt(h), parseInt(m), 0, 0);
 
         const normalDuration = subjectsData[subjectName] || 90;
         const extraDuration = normalDuration + (normalDuration * EXTRA_PERCENT / 100);
