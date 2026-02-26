@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exam Alert System (Silent)</title>
+    <title>Exam Alert System</title>
     <style>
         body { font-family: Arial,sans-serif; margin:0; padding:0; background: linear-gradient(to right,#4facfe,#00f2fe); color:#fff; text-align:center; }
         h1 { background: rgba(0,0,0,0.5); padding:20px; margin:0; font-size:2em; }
@@ -55,6 +55,7 @@
 
 <div id="log"></div>
 
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com"></script>
 <script src="https://www.gstatic.com"></script>
 
@@ -69,14 +70,15 @@ const subjectsData = {
     "History":80, "Geography":90, "Music":90, "PE":90
 };
 
+// VUL DEZE GEGEVENS IN VANUIT JE FIREBASE CONSOLE
 const firebaseConfig = {
-  apiKey: "AIzaSyBG9HsrRsFq8YLkUHTDi4XlREdYwX1Jyd0",
-  authDomain: "exam-notice-86cd4.firebaseapp.com",
-  databaseURL: "https://exam-notice-86cd4-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "exam-notice-86cd4",
-  storageBucket: "exam-notice-86cd4.appspot.com",
-  messagingSenderId: "717990898282",
-  appId: "1:717990898282:web:f627c05aacf7aeca657813"
+  apiKey: "JOUW_API_KEY",
+  authDomain: "JOUW_PROJECT.firebaseapp.com",
+  databaseURL: "https://JOUW_PROJECT.firebaseio.com",
+  projectId: "JOUW_PROJECT_ID",
+  storageBucket: "JOUW_PROJECT.appspot.com",
+  messagingSenderId: "ID",
+  appId: "APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -92,11 +94,18 @@ function startExam() {
     const time = document.getElementById("startTime").value;
     if(!time){ alert("Please select a start time"); return; }
     
-    // Firebase key safe naming
     const safeKey = subject.replace(/[.#$/[\]]/g, "_");
+    
+    // De adminKey: "" is cruciaal om door je Security Rules te komen
     db.ref("exams/" + safeKey).set({ 
         startTime: time,
-        displayName: subject 
+        displayName: subject,
+        adminKey: "" 
+    }).then(() => {
+        alert("Exam saved successfully!");
+    }).catch(error => {
+        console.error("Fout bij opslaan:", error);
+        alert("Permission denied! Check your security rules.");
     });
 }
 
@@ -108,6 +117,7 @@ function renderExams(exams){
         const exam = exams[key];
         const subjectName = exam.displayName || key;
         const timeStr = exam.startTime;
+        if(!timeStr) continue;
         
         const [h, m] = timeStr.split(":");
         const start = new Date();
